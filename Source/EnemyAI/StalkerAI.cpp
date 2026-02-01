@@ -4,7 +4,7 @@
 #include "StalkerAI.h"
 #include "NavigationSystem.h"
 #include "NavMesh/RecastNavMesh.h"
-#include "DetourNavMesh.h"
+#include "Detour/DetourNavMesh.h"
 
 // Sets default values
 AStalkerAI::AStalkerAI()
