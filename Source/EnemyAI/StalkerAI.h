@@ -25,6 +25,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void CalculateAStarCost(const FVector& currentPos, const FVector& targetPos, const FVector& vertexPos, float& totalCost);
-	void GetAllNeighbouringTiles();
+	void GetAllNeighbouringTiles(FVector vertexPos);
 
 };

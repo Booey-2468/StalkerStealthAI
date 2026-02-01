@@ -2,6 +2,9 @@
 
 
 #include "StalkerAI.h"
+#include "NavigationSystem.h"
+#include "NavMesh/RecastNavMesh.h"
+#include "DetourNavMesh.h"
 
 // Sets default values
 AStalkerAI::AStalkerAI()
@@ -25,6 +28,7 @@ void AStalkerAI::Tick(float DeltaTime)
 
 }
 
+
 void AStalkerAI::CalculateAStarCost(const FVector& currentPos, const FVector& targetPos, const FVector& vertexPos, float& totalCost)
 {
 	FVector vectorDir = vertexPos - currentPos;
@@ -38,7 +42,6 @@ void AStalkerAI::GetAllNeighbouringTiles(FVector vertexPos)
 	FCollisionQueryParams parameters;
 	FHitResult hit;
 	FVector start = GetActorLocation();
-	Navmes
 	FVector end = vertexPos;
 	if (ActorLineTraceSingle(hit, start, end, ECC_Visibility, parameters))
 	{
