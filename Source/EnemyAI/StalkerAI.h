@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "StalkerAI.generated.h"
+#include "NavigationSystem.h"
+#include "NavMesh/RecastNavMesh.h"
+#include "Detour/DetourNavMesh.h"
 
 UCLASS()
 class ENEMYAI_API AStalkerAI : public APawn
@@ -26,5 +29,6 @@ public:
 
 	void CalculateAStarCost(const FVector& currentPos, const FVector& targetPos, const FVector& vertexPos, float& totalCost);
 	void GetAllNeighbouringTiles(FVector vertexPos);
+	ARecastNavMesh* GetNavmesh();
 
 };

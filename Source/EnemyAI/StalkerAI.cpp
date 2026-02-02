@@ -43,12 +43,14 @@ void AStalkerAI::GetAllNeighbouringTiles(FVector vertexPos)
 	FHitResult hit;
 	FVector start = GetActorLocation();
 	FVector end = vertexPos;
+	
 	if (ActorLineTraceSingle(hit, start, end, ECC_Visibility, parameters))
 	{
 
 	}
 }
 
-// Called to bind functionality to input
-
-
+ARecastNavMesh* AStalkerAI::GetNavmesh()
+{
+	dtNavMesh* navMesh = ARecastNavMesh -> GetRecastMesh;
+}
