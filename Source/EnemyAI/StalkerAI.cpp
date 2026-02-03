@@ -52,5 +52,8 @@ void AStalkerAI::GetAllNeighbouringTiles(FVector vertexPos)
 
 ARecastNavMesh* AStalkerAI::GetNavmesh()
 {
-	dtNavMesh* navMesh = ARecastNavMesh -> GetRecastMesh;
+	UNavigationSystemV1* navMesh = FNavigationSystem::GetCurrent<UNavigationSystemV1>(World);
+	if(!navMesh) return nullptr;
+
+	return Cast <ARecastNavMesh> (navMesh -> GetDefaultNavDataInstance())
 }
