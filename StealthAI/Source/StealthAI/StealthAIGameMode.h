@@ -4,15 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "EnemyAIGameMode.generated.h"
+#include "StealthAIGameMode.generated.h"
 
 UCLASS(minimalapi)
-class AEnemyAIGameMode : public AGameModeBase
+class AStealthAIGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
 public:
-	AEnemyAIGameMode();
+	AStealthAIGameMode();
 };
 
 

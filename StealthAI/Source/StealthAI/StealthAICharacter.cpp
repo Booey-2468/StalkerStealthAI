@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "EnemyAICharacter.h"
+#include "StealthAICharacter.h"
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -14,9 +14,9 @@
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
 //////////////////////////////////////////////////////////////////////////
-// AEnemyAICharacter
+// AStealthAICharacter
 
-AEnemyAICharacter::AEnemyAICharacter()
+AStealthAICharacter::AStealthAICharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -57,7 +57,7 @@ AEnemyAICharacter::AEnemyAICharacter()
 //////////////////////////////////////////////////////////////////////////
 // Input
 
-void AEnemyAICharacter::NotifyControllerChanged()
+void AStealthAICharacter::NotifyControllerChanged()
 {
 	Super::NotifyControllerChanged();
 
@@ -71,7 +71,7 @@ void AEnemyAICharacter::NotifyControllerChanged()
 	}
 }
 
-void AEnemyAICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void AStealthAICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
@@ -81,10 +81,10 @@ void AEnemyAICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
 		// Moving
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AEnemyAICharacter::Move);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AStealthAICharacter::Move);
 
 		// Looking
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AEnemyAICharacter::Look);
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AStealthAICharacter::Look);
 	}
 	else
 	{
@@ -92,7 +92,7 @@ void AEnemyAICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	}
 }
 
-void AEnemyAICharacter::Move(const FInputActionValue& Value)
+void AStealthAICharacter::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
@@ -115,7 +115,7 @@ void AEnemyAICharacter::Move(const FInputActionValue& Value)
 	}
 }
 
-void AEnemyAICharacter::Look(const FInputActionValue& Value)
+void AStealthAICharacter::Look(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();

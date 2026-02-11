@@ -1,10 +1,10 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "EnemyAIGameMode.h"
-#include "EnemyAICharacter.h"
+#include "StealthAIGameMode.h"
+#include "StealthAICharacter.h"
 #include "UObject/ConstructorHelpers.h"
 
-AEnemyAIGameMode::AEnemyAIGameMode()
+AStealthAIGameMode::AStealthAIGameMode()
 {
 	// set default pawn class to our Blueprinted character
 	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter"));

@@ -7,13 +7,15 @@
 #include "StalkerAIAgent.generated.h"
 
 UCLASS()
-class ENEMYAI_API AStalkerAIAgent : public APawn
+class AStalkerAIAgent : public APawn
 {
 	GENERATED_BODY()
+	UStaticMeshComponent* Mesh;
 
 public:
 	// Sets default values for this pawn's properties
 	AStalkerAIAgent();
+	void ChaseObjective();
 
 protected:
 	// Called when the game starts or when spawned
@@ -23,7 +25,5 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 };

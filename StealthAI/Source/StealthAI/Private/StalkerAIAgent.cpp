@@ -8,6 +8,12 @@ AStalkerAIAgent::AStalkerAIAgent()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("MyMesh");
+
+}
+
+void AStalkerAIAgent::ChaseObjective()
+{
 
 }
 
@@ -24,11 +30,3 @@ void AStalkerAIAgent::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
-
-// Called to bind functionality to input
-void AStalkerAIAgent::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-}
-
