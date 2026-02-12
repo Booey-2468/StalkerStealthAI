@@ -8,17 +8,21 @@ AStalkerAIAgent::AStalkerAIAgent()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("PawnMesh");
-	PawnSensor = CreateDefaultSubobject<UPawnSensingComponent>("PawnSensor");
-	AIController = CreateDefaultSubobject<AAIController>("StalkerAIController")
+	RootComponent = RootComp;
 
+	RootComp = CreateDefaultSubobject<USceneComponent>("Root Component");
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
+	Mesh->SetupAttachment(GetRootComponent());
+
+	PawnSensor = CreateDefaultSubobject<UPawnSensingComponent>("PawnSensing Component");
+	AIController = CreateDefaultSubobject<AAIController>("AI Controller");
 }
 
 void AStalkerAIAgent::ChaseObjective(FVector ObjectiveLocation)
 {
 	ARecastNavMesh* NavMesh = GetNavmesh();
 
-	AIController->MoveToLocation(ObjectiveLocation, 15.0f, true, true, true, true, , false);
+	AIController->MoveToLocation(ObjectiveLocation, 15.0f, true, true, true, true);
 }
 
 ARecastNavMesh* AStalkerAIAgent::GetNavmesh()

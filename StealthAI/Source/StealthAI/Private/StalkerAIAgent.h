@@ -14,20 +14,25 @@ UCLASS()
 class AStalkerAIAgent : public APawn
 {
 	GENERATED_BODY()
-
-	UStaticMeshComponent* Mesh;
-	UPawnSensingComponent* PawnSensor;
-	AAIController* AIController;
 	
 public:
 	// Sets default values for this pawn's properties
 	AStalkerAIAgent();
-	void ChaseObjective();
+	void ChaseObjective(FVector ObjectiveLocation);
 	ARecastNavMesh* GetNavmesh();
+
+	USceneComponent* RootComp;
+
+	UPawnSensingComponent* PawnSensor;
+	AAIController* AIController;
+
+	UPROPERTY(EditAnywhere)
+	UStaticMeshComponent* Mesh;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
 
 public:	
 	// Called every frame
