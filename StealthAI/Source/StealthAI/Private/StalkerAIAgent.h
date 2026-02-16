@@ -4,7 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-#include "Perception/PawnSensingComponent.h"
+
+#include "Perception/AIPerceptionComponent.h"
+#include "Perception/AISenseConfig_Sight.h"
+#include "Perception/AISenseConfig_Hearing.h"
+#include "Perception/AIPerceptionTypes.h"
+
 #include "Navmesh/RecastNavMesh.h"
 #include "NavigationSystem.h"
 #include "AIController.h"
@@ -23,8 +28,12 @@ public:
 
 	USceneComponent* RootComp;
 
-	UPawnSensingComponent* PawnSensor;
+	UAIPerceptionComponent* PawnPerception;
+
+	UPROPERTY(EditAnywhere)
 	AAIController* AIController;
+
+	bool IsInSight;
 
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* Mesh;
@@ -32,11 +41,17 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	UFUNCTION()
+	void UpdatePerceptionVariables(AActor* PercievedActor, FAIStimulus Stimulus);
+	void SetupAIPerception();
 
+	FAISenseID SightID;
+	FAISenseID HearingID;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
 
 
 };

@@ -14,8 +14,31 @@ AStalkerAIAgent::AStalkerAIAgent()
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
 	Mesh->SetupAttachment(GetRootComponent());
 
-	PawnSensor = CreateDefaultSubobject<UPawnSensingComponent>("PawnSensing Component");
+	PawnPerception = CreateDefaultSubobject<UAIPerceptionComponent>("AI Perception");
 	AIController = CreateDefaultSubobject<AAIController>("AI Controller");
+	SetupAIPerception();
+
+}
+/// <summary>
+/// Sets up AI Sight and Hearing uses the perception library stuff
+/// </summary>
+void AStalkerAIAgent::SetupAIPerception()
+{
+	UAISenseConfig_Sight* SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>("Sight Config");
+
+	SightConfig->SightRadius = 300.0f;
+	SightConfig->LoseSightRadius = 300.0f;
+	SightConfig->PeripheralVisionAngleDegrees = 90.0f;
+
+	UAISenseConfig_Hearing* HearingConfig = CreateDefaultSubobject<UAISenseConfig_Hearing>("Hearing Config");
+	HearingConfig->HearingRange = 500.0f;
+
+
+	PawnPerception->ConfigureSense(*SightConfig);
+	PawnPerception->ConfigureSense(*HearingConfig);
+
+	SightID = SightConfig->GetSenseID();
+	HearingID = HearingConfig->GetSenseID();
 }
 
 void AStalkerAIAgent::ChaseObjective(FVector ObjectiveLocation)
@@ -39,12 +62,30 @@ ARecastNavMesh* AStalkerAIAgent::GetNavmesh()
 void AStalkerAIAgent::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	if (PawnPerception)
+	{
+		PawnPerception->OnTargetPerceptionUpdated.AddDynamic(this, &AStalkerAIAgent::UpdatePerceptionVariables);
+	}
+}
+
+void AStalkerAIAgent::UpdatePerceptionVariables(AActor* PercievedActor, FAIStimulus Stimulus)
+{
+	if (Stimulus.Type == SightID)
+	{
+		IsInSight = true;
+	}
+	else if (Stimulus.Type == SightID && !Stimulus.SensingSucceeded)
+	{
+
+	}
+	else if (Stimulus.Type == HearingID)
+	{
+
+	}
 }
 
 // Called every frame
 void AStalkerAIAgent::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
