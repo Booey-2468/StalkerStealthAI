@@ -1,18 +1,16 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "StalkerAIAgent.h"
+#include "StealthAIAgent.h"
 
 // Sets default values
-AStalkerAIAgent::AStalkerAIAgent()
+AStealthAIAgent::AStealthAIAgent()
 {
- 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	RootComponent = RootComp;
 
 	RootComp = CreateDefaultSubobject<USceneComponent>("Root Component");
-	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
-	Mesh->SetupAttachment(GetRootComponent());
 
 	PawnPerception = CreateDefaultSubobject<UAIPerceptionComponent>("AI Perception");
 	AIController = CreateDefaultSubobject<AAIController>("AI Controller");
@@ -22,7 +20,7 @@ AStalkerAIAgent::AStalkerAIAgent()
 /// <summary>
 /// Sets up AI Sight and Hearing uses the perception library stuff
 /// </summary>
-void AStalkerAIAgent::SetupAIPerception()
+void AStealthAIAgent::SetupAIPerception()
 {
 	UAISenseConfig_Sight* SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>("Sight Config");
 
@@ -41,14 +39,14 @@ void AStalkerAIAgent::SetupAIPerception()
 	HearingID = HearingConfig->GetSenseID();
 }
 
-void AStalkerAIAgent::ChaseObjective(FVector ObjectiveLocation)
+void AStealthAIAgent::ChaseObjective(FVector ObjectiveLocation)
 {
 	ARecastNavMesh* NavMesh = GetNavmesh();
 
 	AIController->MoveToLocation(ObjectiveLocation, 15.0f, true, true, true, true);
 }
 
-ARecastNavMesh* AStalkerAIAgent::GetNavmesh()
+ARecastNavMesh* AStealthAIAgent::GetNavmesh()
 {
 	UNavigationSystemV1* NavSystem = FNavigationSystem::GetCurrent<UNavigationSystemV1>(GetWorld());
 
@@ -59,18 +57,19 @@ ARecastNavMesh* AStalkerAIAgent::GetNavmesh()
 }
 
 // Called when the game starts or when spawned
-void AStalkerAIAgent::BeginPlay()
+void AStealthAIAgent::BeginPlay()
 {
 	Super::BeginPlay();
 	if (PawnPerception)
 	{
-		PawnPerception->OnTargetPerceptionUpdated.AddDynamic(this, &AStalkerAIAgent::UpdatePerceptionVariables);
+		PawnPerception->OnTargetPerceptionUpdated.AddDynamic(this, &AStealthAIAgent::UpdatePerceptionVariables);
 	}
 }
 
-void AStalkerAIAgent::UpdatePerceptionVariables(AActor* PercievedActor, FAIStimulus Stimulus)
+void AStealthAIAgent::UpdatePerceptionVariables(AActor* PercievedActor, FAIStimulus Stimulus)
 {
-	if (Stimulus.Type == SightID)
+	AStealthAICharacter* PlayerCharacter = Cast<AStealthAICharacter>(PercievedActor);
+	if (Stimulus.Type == SightID && Stimulus.SensingSucceeded && PlayerCharacter)
 	{
 		IsInSight = true;
 	}
@@ -78,14 +77,16 @@ void AStalkerAIAgent::UpdatePerceptionVariables(AActor* PercievedActor, FAIStimu
 	{
 
 	}
-	else if (Stimulus.Type == HearingID)
+	else if (Stimulus.Type == HearingID && Stimulus.SensingSucceeded && PlayerCharacter)
 	{
 
 	}
 }
 
 // Called every frame
-void AStalkerAIAgent::Tick(float DeltaTime)
+void AStealthAIAgent::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
+
+

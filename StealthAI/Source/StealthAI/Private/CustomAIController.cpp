@@ -3,8 +3,15 @@
 
 #include "CustomAIController.h"
 
+ACustomAIController::ACustomAIController()
+{
+
+}
+
 void ACustomAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-	AStalkerAIAgent* MyAIAgent = Cast<AStalkerAIAgent>(InPawn);
+	AStealthAIAgent* MyAIAgent = Cast<AStealthAIAgent>(InPawn);
+
+
 }

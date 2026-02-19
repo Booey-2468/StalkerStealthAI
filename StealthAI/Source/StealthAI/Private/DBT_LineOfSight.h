@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/Decorators/BTDecorator_Blackboard.h"
-#include "StalkerAIAgent.h"
+#include "StealthAIAgent.h"
 #include "DBT_LineOfSight.generated.h"
 
 /**
@@ -15,6 +15,6 @@ class UDBT_LineOfSight : public UBTDecorator_Blackboard
 {
 	GENERATED_BODY()
 
-	bool InLineOfSight(AStalkerAIAgent* AIAgent);
+	bool InLineOfSight(AStealthAIAgent* AIAgent);
 	
 };

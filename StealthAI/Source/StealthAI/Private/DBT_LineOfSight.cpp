@@ -3,7 +3,7 @@
 
 #include "DBT_LineOfSight.h"
 
-bool UDBT_LineOfSight::InLineOfSight(AStalkerAIAgent* AIAgent)
+bool UDBT_LineOfSight::InLineOfSight(AStealthAIAgent* AIAgent)
 {
 	return AIAgent->IsInSight;
 }

@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
-#include "StalkerAIAgent.h"
+#include "StealthAIAgent.h"
+
+#include "BehaviorTree/BehaviorTree.h"
+
 #include "CustomAIController.generated.h"
 
 /**
@@ -15,6 +18,14 @@ class ACustomAIController : public AAIController
 {
 	GENERATED_BODY()
 
+	ACustomAIController();
+
+public:
+	UPROPERTY(Transient)
+	UBehaviorTree* Behaviourtree;
+
+	UPROPERTY(Transient)
+	UBlackboardComponent* BB;
 
 	virtual void OnPossess(APawn* InPawn) override;
 };
