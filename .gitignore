@@ -7,7 +7,6 @@
 *.VC.db
 *.VC.opendb
 *.suo
-*.sln
 *.opensdf
 *.sdf
 .vsconfig
