@@ -15,6 +15,7 @@
 #include "NavigationSystem.h"
 #include "AIController.h"
 
+#include "GameFramework/CharacterMovementComponent.h"
 
 #include "StealthAIAgent.generated.h"
 
@@ -38,6 +39,8 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	AAIController* AIController;
+
+	UBehaviorTree* BehaviourTree;
 
 	bool IsInSight;
 protected:

@@ -7,6 +7,9 @@
 #include "StealthAIAgent.h"
 
 #include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "BehaviorTree/BehaviorTreeComponent.h"
+
 
 #include "CustomAIController.generated.h"
 
@@ -22,10 +25,10 @@ class ACustomAIController : public AAIController
 
 public:
 	UPROPERTY(Transient)
-	UBehaviorTree* Behaviourtree;
+	UBehaviorTreeComponent* BehaviourTreeComp;
 
 	UPROPERTY(Transient)
-	UBlackboardComponent* BB;
+	UBlackboardComponent* BlackboardComp;
 
 	virtual void OnPossess(APawn* InPawn) override;
 };

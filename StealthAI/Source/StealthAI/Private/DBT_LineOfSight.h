@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/Decorators/BTDecorator_Blackboard.h"
+
+#include "BehaviorTree/BlackboardComponent.h"
+#include "BehaviorTree/Blackboard/BlackboardKeyType_Bool.h"
 #include "StealthAIAgent.h"
 #include "DBT_LineOfSight.generated.h"
 
@@ -15,6 +18,10 @@ class UDBT_LineOfSight : public UBTDecorator_Blackboard
 {
 	GENERATED_BODY()
 
-	bool InLineOfSight(AStealthAIAgent* AIAgent);
+	void InLineOfSight(AStealthAIAgent* AIAgent);
+
+	bool CalculateRawConditionValue(UBehaviorTreeComponent* OwnerComp, uint8 NodeMemory);
+
+	
 	
 };

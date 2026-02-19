@@ -3,7 +3,32 @@
 
 #include "DBT_LineOfSight.h"
 
-bool UDBT_LineOfSight::InLineOfSight(AStealthAIAgent* AIAgent)
+void UDBT_LineOfSight::InLineOfSight(AStealthAIAgent* AIAgent)
 {
-	return AIAgent->IsInSight;
+	NodeName = "IsInLineOfSight";
+	bCreateNodeInstance = true;
+}
+
+bool UDBT_LineOfSight::CalculateRawConditionValue(UBehaviorTreeComponent* OwnerComp, uint8 NodeMemory) 
+{
+	const UBlackboardComponent* MyBlackboard = OwnerComp->GetBlackboardComponent();
+	AAIController* MyAIController = OwnerComp->GetAIOwner();
+
+	if (!MyBlackboard || !MyAIController)
+	{
+		return false;
+	}
+	else if (!Cast<AStealthAIAgent>(MyAIController->GetPawn()))
+	{
+		return false;
+	}
+
+	if (MyBlackboard->GetValueAsBool("IsInLineOfSight"))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
