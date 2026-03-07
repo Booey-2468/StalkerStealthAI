@@ -11,18 +11,17 @@
 #include "StealthAIAgent.h"
 #include "CustomAIController.h"
 
-
-#include "BTDecorator_IsInLineOfSight.generated.h"
+#include "BTDecorator_IsInRange.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class UBTDecorator_IsInLineOfSight : public UBTDecorator_BlackboardBase
+class STEALTHAI_API UBTDecorator_IsInRange : public UBTDecorator_BlackboardBase
 {
 	GENERATED_BODY()
-
-	UBTDecorator_IsInLineOfSight();
+	
+	UBTDecorator_IsInRange();
 
 	virtual bool CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const override;
 };

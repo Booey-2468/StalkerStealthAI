@@ -10,6 +10,8 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 
+#include "Navigation/PathFollowingComponent.h"
+
 
 #include "CustomAIController.generated.h"
 
@@ -24,11 +26,34 @@ class ACustomAIController : public AAIController
 	ACustomAIController();
 
 public:
-	UPROPERTY(Transient)
+
 	UBehaviorTreeComponent* BehaviourTreeComp;
 
-	UPROPERTY(Transient)
 	UBlackboardComponent* BlackboardComp;
 
+	UAISenseConfig_Sight* SightConfig;
+
+	UAISenseConfig_Hearing* HearingConfig;
+
+
+	UFUNCTION()
+	void UpdatePerceptionVariables(AActor* PercievedActor, FAIStimulus Stimulus);
+
+	UPROPERTY(VisibleAnywhere)
+	UAIPerceptionComponent* PawnPerception;
+
+	FAISenseID SightID;
+	FAISenseID HearingID;
+
 	virtual void OnPossess(APawn* InPawn) override;
+
+	APawn* GetSeenPawn();
+
+	virtual void OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result) override;
+
+protected:
+	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaTime) override;
+
 };

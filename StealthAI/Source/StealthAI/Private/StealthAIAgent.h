@@ -13,11 +13,16 @@
 
 #include "Navmesh/RecastNavMesh.h"
 #include "NavigationSystem.h"
-#include "AIController.h"
+
+#include "BehaviorTree/Blackboard/BlackboardKeyType_Bool.h"
+#include "BehaviorTree/BlackboardComponent.h"
+
 
 #include "GameFramework/CharacterMovementComponent.h"
 
 #include "StealthAIAgent.generated.h"
+
+class ACustomAIController;
 
 UCLASS()
 class AStealthAIAgent : public ACharacter
@@ -30,30 +35,19 @@ public:
 
 public:
 	// Sets default values for this pawn's properties
-	void ChaseObjective(FVector ObjectiveLocation);
 	ARecastNavMesh* GetNavmesh();
 
 	USceneComponent* RootComp;
 
-	UAIPerceptionComponent* PawnPerception;
-
 	UPROPERTY(EditAnywhere)
-	AAIController* AIController;
-
 	UBehaviorTree* BehaviourTree;
 
-	bool IsInSight;
+	ACustomAIController* AIController;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UFUNCTION()
-	void UpdatePerceptionVariables(AActor* PercievedActor, FAIStimulus Stimulus);
-	
-	void SetupAIPerception();
-
-	FAISenseID SightID;
-	FAISenseID HearingID;
 
 public:
 	// Called every frame

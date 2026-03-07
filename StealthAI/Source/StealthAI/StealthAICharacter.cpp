@@ -18,6 +18,12 @@ DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
 AStealthAICharacter::AStealthAICharacter()
 {
+	StimuliSource = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>("Stimuli Source");
+	StimuliSource->RegisterForSense(UAISense_Sight::StaticClass());
+	StimuliSource->RegisterForSense(UAISense_Hearing::StaticClass());
+	StimuliSource->RegisterWithPerceptionSystem();
+	StimuliSource->bAutoRegister = true;
+
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 		
@@ -53,7 +59,6 @@ AStealthAICharacter::AStealthAICharacter()
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
-
 //////////////////////////////////////////////////////////////////////////
 // Input
 

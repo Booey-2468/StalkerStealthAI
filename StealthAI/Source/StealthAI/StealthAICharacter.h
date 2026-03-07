@@ -4,6 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "Perception/AISense_Sight.h"
+#include "Perception/AISense_Hearing.h"
+
+
 #include "Logging/LogMacros.h"
 #include "StealthAICharacter.generated.h"
 
@@ -44,6 +50,9 @@ class AStealthAICharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	UPROPERTY(VisibleAnywhere)
+	UAIPerceptionStimuliSourceComponent* StimuliSource;
+
 public:
 	AStealthAICharacter();
 	
@@ -62,6 +71,7 @@ protected:
 	virtual void NotifyControllerChanged() override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
 
 public:
 	/** Returns CameraBoom subobject **/
