@@ -28,8 +28,8 @@ void UBTService_OnSeenPlayer::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
 
 	MyBlackboard->SetValueAsFloat("DistFromPlayer", DistFromPlayer);
 
-	MyBlackboard->SetValueAsBool("IsRecentlyDetected", true);
-	MyBlackboard->SetValueAsFloat("PlayerSeenTimer", MyBlackboard->GetValueAsFloat("PlayerSeenTime"));
+	MyBlackboard->SetValueAsBool("IsAlert", true);
+	MyBlackboard->SetValueAsFloat("AlertStateTimer", MyBlackboard->GetValueAsFloat("AlertStateTime"));
 	MyBlackboard->SetValueAsBool("ShouldStartInDepthRoaming", false);
 
 	MyBlackboard->SetValueAsVector("LastDetectedLocation", Player->GetActorLocation());

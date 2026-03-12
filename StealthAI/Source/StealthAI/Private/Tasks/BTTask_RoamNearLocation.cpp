@@ -13,12 +13,13 @@ EBTNodeResult::Type UBTTask_RoamNearLocation::ExecuteTask(UBehaviorTreeComponent
 {
 	UBlackboardComponent* MyBlackboard = OwnerComp.GetBlackboardComponent();
 	ACustomAIController* MyAIController = Cast<ACustomAIController>(OwnerComp.GetAIOwner());
+	AStealthAIAgent* MyAIAgent = Cast<AStealthAIAgent>(MyAIController->GetPawn());
 
-	if (!MyBlackboard || !MyAIController || !Cast<AStealthAIAgent>(MyAIController->GetPawn()))
+	if (!MyBlackboard || !MyAIController || !MyAIAgent)
 	{
 		return EBTNodeResult::Type::Failed;
 	}
-	
+	MyAIAgent->GetCharacterMovement()->bOrientRotationToMovement = true;
 	MyBlackboard->SetValueAsVector("TargetLocation", MyBlackboard->GetValueAsVector("LastDetectedLocation"));
 
 	return EBTNodeResult::Type::Succeeded;

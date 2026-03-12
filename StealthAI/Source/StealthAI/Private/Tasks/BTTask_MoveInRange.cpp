@@ -29,17 +29,22 @@ EBTNodeResult::Type UBTTask_MoveInRange::ExecuteTask(UBehaviorTreeComponent& Own
 	FVector RangeLocation;
 	if (IsTooClose)
 	{
-		RangeLocation = Pawn->GetActorLocation() - Player->GetActorLocation();
+		RangeLocation = (Pawn->GetActorLocation() - Player->GetActorLocation());
 		RangeLocation.Normalize();
-		RangeLocation = Pawn->GetActorLocation() + (RangeLocation * MyBlackboard->GetValueAsFloat("MinFiringRange"));
+		RangeLocation = Pawn->GetActorLocation() + (RangeLocation * MyBlackboard->GetValueAsFloat("MinFiringRange") + 10.0f);
+		Pawn->GetCharacterMovement()->bOrientRotationToMovement = false;
+
+		// Uses 10.0f as buffer so AI doesn't sit on border of range and goes back and forth
 	}
 	else if (IsTooFar)
 	{
 		RangeLocation = Player->GetActorLocation();
+		Pawn->GetCharacterMovement()->bOrientRotationToMovement = true;
 	}
 	else
 	{
 		RangeLocation = Pawn->GetActorLocation();
+		Pawn->GetCharacterMovement()->bOrientRotationToMovement = true;
 	}
 
 	FNavLocation ProjLocation;

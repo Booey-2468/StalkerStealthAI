@@ -8,6 +8,9 @@
 #include "CustomAIController.h"
 #include "EnvironmentQuery/EnvQueryTypes.h"
 #include "EnvironmentQuery/Items/EnvQueryItemType_Actor.h"
+#include "EnvironmentQuery/Items/EnvQueryItemType_Point.h"
+
+
 #include "EnvQueryContext_FindCoverSpot.generated.h"
 
 /**

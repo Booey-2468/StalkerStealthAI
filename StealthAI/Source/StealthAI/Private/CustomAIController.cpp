@@ -14,16 +14,16 @@ ACustomAIController::ACustomAIController()
 
 	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>("Sight Config");
 
-	SightConfig->SightRadius = 7000.0f;
+	SightConfig->SightRadius = 3000.0f;
 	SightConfig->LoseSightRadius = 2200.0f;
-	SightConfig->PeripheralVisionAngleDegrees = 90.0f;
+	SightConfig->PeripheralVisionAngleDegrees = 45.0f;
 	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
 	SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
 	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
 
 	HearingConfig = CreateDefaultSubobject<UAISenseConfig_Hearing>("Hearing Config");
 
-	HearingConfig->HearingRange = 6000.0f;
+	HearingConfig->HearingRange = 5000.0f;
 	HearingConfig->DetectionByAffiliation.bDetectEnemies = true;
 	HearingConfig->DetectionByAffiliation.bDetectFriendlies = true;
 	HearingConfig->DetectionByAffiliation.bDetectNeutrals = true;
@@ -65,6 +65,7 @@ void ACustomAIController::OnPossess(APawn* InPawn)
 		BlackboardComp->InitializeBlackboard(*MyAIAgent->BehaviourTree->BlackboardAsset);
 		BehaviourTreeComp->StartTree(*MyAIAgent->BehaviourTree);
 	}
+	this->SetControlRotation(MyAIAgent->GetActorRotation());
 }
 
 void ACustomAIController::UpdatePerceptionVariables(AActor* PercievedActor, FAIStimulus Stimulus)
@@ -92,16 +93,29 @@ void ACustomAIController::UpdatePerceptionVariables(AActor* PercievedActor, FAIS
 
 void ACustomAIController::Tick(float DeltaTime)
 {	
+	if (BlackboardComp->GetValueAsBool("IsAlert") && BlackboardComp->GetValueAsFloat("AlertStateTimer") > 0)
+	{
+		BlackboardComp->SetValueAsFloat("AlertStateTimer", BlackboardComp->GetValueAsFloat("AlertStateTimer") - DeltaTime);
+	}
+	else if (BlackboardComp->GetValueAsBool("IsAlert"))
+	{
+		BlackboardComp->SetValueAsBool("IsAlert", false);
+		BlackboardComp->SetValueAsFloat("AlertStateTimer", 0.0f);	// Disables the Alert State and Enables Roaming Mode
+
+		BlackboardComp->SetValueAsBool("IsRecentlyDetected", true);
+		BlackboardComp->SetValueAsFloat("PlayerSeenTimer", BlackboardComp->GetValueAsFloat("PlayerSeenTime"));
+	}
 	//Timer for Roaming sets Is recently detected to false and sets timer to 0 once timer is up allowing for patrolling
 	if (BlackboardComp->GetValueAsBool("IsRecentlyDetected") && BlackboardComp->GetValueAsFloat("PlayerSeenTimer") > 0)
 	{
 		BlackboardComp->SetValueAsFloat("PlayerSeenTimer", BlackboardComp->GetValueAsFloat("PlayerSeenTimer") - DeltaTime);
 	}
-	else if (BlackboardComp->GetValueAsBool("IsRecentlyDetected"))	
+	else if (BlackboardComp->GetValueAsBool("IsRecentlyDetected"))
 	{
 		BlackboardComp->SetValueAsBool("IsRecentlyDetected", false);
 		BlackboardComp->SetValueAsFloat("PlayerSeenTimer", 0.0f);
 	}
+
 	// Checks Agent no longer needs to be in deeper roaming when roaming is over or the player has been seen
 	if(Cast<AStealthAICharacter>(GetSeenPawn()) || !BlackboardComp->GetValueAsBool("IsRecentlyDetected"))
 	{
@@ -116,5 +130,9 @@ void ACustomAIController::OnMoveCompleted(FAIRequestID RequestID, const FPathFol
 	if (!Cast<AStealthAICharacter>(GetSeenPawn()) && BlackboardComp->GetValueAsBool("IsRecentlyDetected"))
 	{
 		BlackboardComp->SetValueAsBool("ShouldStartInDepthRoaming", true);
+	}
+	if (BlackboardComp->GetValueAsBool("IsTakingCover"))
+	{
+		BlackboardComp->SetValueAsBool("IsTakingCover", false);
 	}
 }

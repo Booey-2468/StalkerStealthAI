@@ -11,6 +11,10 @@ void UEnvQueryContext_FindCoverSpot::ProvideContext(FEnvQueryInstance& QueryInst
 
 	if (MyAIController && MyAIController->GetSeenPawn())
 	{
-		UEnvQueryItemType_Actor::SetContextHelper(ContextData, MyAIController->GetSeenPawn());
+		UBlackboardComponent* MyBlackboard = MyAIController->BlackboardComp;
+		if (MyBlackboard)
+		{
+			UEnvQueryItemType_Point::SetContextHelper(ContextData, MyBlackboard->GetValueAsVector("TargetLocation"));
+		}
 	}
 }
