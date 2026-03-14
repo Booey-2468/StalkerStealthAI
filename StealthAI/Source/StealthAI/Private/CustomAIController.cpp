@@ -14,8 +14,8 @@ ACustomAIController::ACustomAIController()
 
 	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>("Sight Config");
 
-	SightConfig->SightRadius = 3000.0f;
-	SightConfig->LoseSightRadius = 2200.0f;
+	SightConfig->SightRadius = 2500.0f;
+	SightConfig->LoseSightRadius = 3000.0f;
 	SightConfig->PeripheralVisionAngleDegrees = 45.0f;
 	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
 	SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
@@ -85,7 +85,7 @@ void ACustomAIController::UpdatePerceptionVariables(AActor* PercievedActor, FAIS
 			BlackboardComp->SetValueAsObject("EnemyActor", nullptr);
 		}
 	}
-	else if (Stimulus.Type == HearingID && Stimulus.SensingSucceeded && PlayerCharacter)
+	else if (Stimulus.Type == HearingID && Stimulus.WasSuccessfullySensed() && PlayerCharacter)
 	{
 		
 	}
@@ -114,6 +114,8 @@ void ACustomAIController::Tick(float DeltaTime)
 	{
 		BlackboardComp->SetValueAsBool("IsRecentlyDetected", false);
 		BlackboardComp->SetValueAsFloat("PlayerSeenTimer", 0.0f);
+
+		BlackboardComp->SetValueAsBool("IsPatrolling", true);
 	}
 
 	// Checks Agent no longer needs to be in deeper roaming when roaming is over or the player has been seen

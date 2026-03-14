@@ -17,9 +17,12 @@ void UEnvQueryGenerator_SurroundCone::GenerateItems(FEnvQueryInstance& QueryInst
 
 	for (float Angle = -ConeDegrees.GetValue(); Angle < ConeDegrees.GetValue(); Angle += AngleStep.GetValue())
 	{
-		FVector NewAngleVector = AgentForward * FMath::Cos(Angle + 1) +
-			(FVector::UpVector * AgentForward) * FMath::Sin(Angle + 1) +
-			FVector::UpVector * FVector::DotProduct(FVector::UpVector, AgentForward) * (1.0f - FMath::Cos(Angle + 1));
+		//FVector NewAngleVector = AgentForward.RotateAngleAxis(Angle + 1, FVector::UpVector);
+		float RadAngle = (Angle + 1) * PI / 180;
+		FVector NewAngleVector = AgentForward * FMath::Cos(RadAngle) +
+			FVector::CrossProduct(FVector::UpVector, AgentForward) * FMath::Sin(RadAngle) +
+			FVector::UpVector * FVector::DotProduct(FVector::UpVector, AgentForward) * (1.0f - FMath::Cos(RadAngle));
+
 		for (int32 Point = 0; Point < ConeRadius; Point++)
 		{
 			FNavLocation NavLoc = FNavLocation(AgentLocation + NewAngleVector * Point * PointsDist);

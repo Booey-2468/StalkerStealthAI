@@ -21,5 +21,5 @@ bool UBTDecorator_ShouldBeginDeepRoam::CalculateRawConditionValue(UBehaviorTreeC
 	}
 
 
-	return MyBlackboard->GetValueAsBool("IsInDepthRoaming");
+	return MyBlackboard->GetValueAsBool("ShouldStartInDepthRoaming");
 }
