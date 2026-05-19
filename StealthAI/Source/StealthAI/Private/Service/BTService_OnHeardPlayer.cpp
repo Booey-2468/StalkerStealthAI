@@ -14,37 +14,10 @@ void UBTService_OnHeardPlayer::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 	AAIController* MyAIController = OwnerComp.GetAIOwner();
 
 	AStealthAICharacter* Player = Cast<AStealthAICharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
-
-	if (!MyBlackboard || !MyAIController || !Cast<AStealthAIAgent>(MyAIController->GetPawn()) || !Player)
+	AStealthAIAgent* MyAgent;
+	if (!MyBlackboard || !MyAIController || !(MyAgent = Cast<AStealthAIAgent>(MyAIController->GetPawn())) || !Player)
 	{
-		return;
+		return;		// Ensures All pointers are valid
 	}
-
-	AStealthAIAgent* MyAgent = Cast<AStealthAIAgent>(MyAIController->GetPawn());
-
-	MyBlackboard->SetValueAsVector("PlayerVelocity", Player->GetVelocity());
-
-	float DistFromPlayer = (Player->GetActorLocation() - MyAgent->GetActorLocation()).Length();
-
-	MyBlackboard->SetValueAsFloat("DistFromPlayer", DistFromPlayer);
-
-	float MaxFiringDist = MyBlackboard->GetValueAsFloat("MaxFiringRange");
-	float MinFiringDist = MyBlackboard->GetValueAsFloat("MinFiringRange");
-	if (DistFromPlayer < MinFiringDist)
-	{
-		FVector RetreatLocation = (UE::Math::TVector<double>)(MinFiringDist - DistFromPlayer) * (MyAgent->GetActorLocation() - Player->GetActorLocation()).Normalize();
-		FNavLocation ProjLocation;
-		if (!FNavigationSystem::GetCurrent<UNavigationSystemV1>(GetWorld())->ProjectPointToNavigation(RetreatLocation, ProjLocation, FVector(100.0f), nullptr, nullptr))
-		{
-			return;
-		}
-		;
-		MyBlackboard->SetValueAsVector("TargetLocation", ProjLocation);
-	}
-	else if (DistFromPlayer > MaxFiringDist)
-	{
-		MyBlackboard->SetValueAsVector("TargetLocation", Player->GetActorLocation());
-	}
-
 
 }

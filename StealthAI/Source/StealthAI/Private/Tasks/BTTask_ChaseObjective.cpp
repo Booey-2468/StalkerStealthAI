@@ -18,10 +18,7 @@ EBTNodeResult::Type UBTTask_ChaseObjective::ExecuteTask(UBehaviorTreeComponent& 
 		return EBTNodeResult::Type::Failed;
 	}
 	
-	if(MyAIController->GetPathFollowingComponent()->GetStatus() == EPathFollowingStatus::Idle)
-	{
-		MyAIController->MoveToLocation(MyBlackboard->GetValueAsVector("TargetLocation"), 15.0f, true, true, true, true);
-	}
+	MyAIController->MoveToLocation(MyBlackboard->GetValueAsVector("TargetLocation"), 15.0f, true, true, true, true);
 
 	return EBTNodeResult::Type::Succeeded;
 

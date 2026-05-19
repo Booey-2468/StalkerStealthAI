@@ -13,9 +13,8 @@ bool UBTDecorator_ShouldRoam::CalculateRawConditionValue(UBehaviorTreeComponent&
 {
 	const UBlackboardComponent* MyBlackboard = OwnerComp.GetBlackboardComponent();
 	AAIController* MyAIController = OwnerComp.GetAIOwner();
-	AStealthAICharacter* Player = Cast<AStealthAICharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 
-	if (!MyBlackboard || !MyAIController || !Cast<AStealthAIAgent>(MyAIController->GetPawn()) && !Player)
+	if (!MyBlackboard || !MyAIController)
 	{
 		return false;
 	}

@@ -10,44 +10,32 @@ AStealthAIAgent::AStealthAIAgent()
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	bUseControllerRotationPitch = false;
+	bUseControllerRotationPitch = false;	// Doesn't base rotation off of controller rotation
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
-
+	
 	// Configure character movement
-	GetCharacterMovement()->bOrientRotationToMovement = false; // Character moves in the direction of input...	
+	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f); // ...at this rotation rate
-	RootComponent = RootComp;
 
-	RootComp = CreateDefaultSubobject<USceneComponent>("Root Component");
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;	// Makes sure ue5 automatically creates the AI controller
 
-	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
-
-	AIControllerClass = ACustomAIController::StaticClass();
-}
-
-ARecastNavMesh* AStealthAIAgent::GetNavmesh()
-{
-	UNavigationSystemV1* NavSystem = FNavigationSystem::GetCurrent<UNavigationSystemV1>(GetWorld());
-
-	if (!NavSystem)
-		return nullptr;
-
-	return Cast<ARecastNavMesh>(NavSystem->GetDefaultNavDataInstance());
+	AIControllerClass = ACustomAIController::StaticClass();	// Allows ue5 to automatically spawn the AI controller with custom class
 }
 
 // Called when the game starts or when spawned
 void AStealthAIAgent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	AIController = Cast<ACustomAIController>(GetController());
+	EnemyHealth = EnemyMaxHealth;	// Sets Enemy health to its max
 }
 
-// Called every frame
-void AStealthAIAgent::Tick(float DeltaTime)
+FVector AStealthAIAgent::GetPawnViewLocation() const
 {
-	Super::Tick(DeltaTime);
+	return GetActorLocation() + EyeViewPoint;
 }
 
-
+FRotator AStealthAIAgent::GetViewRotation() const
+{
+	return GetActorRotation();
+}

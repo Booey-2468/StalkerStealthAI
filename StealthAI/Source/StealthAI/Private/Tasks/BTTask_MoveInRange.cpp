@@ -53,7 +53,7 @@ EBTNodeResult::Type UBTTask_MoveInRange::ExecuteTask(UBehaviorTreeComponent& Own
 	{
 		return EBTNodeResult::Type::Failed;
 	}
-	
+	MyBlackboard->SetValueAsVector("LastQueriedLocation", Player->GetActorLocation());
 	MyBlackboard->SetValueAsVector("TargetLocation", ProjLocation.Location);
 	return EBTNodeResult::Type::Succeeded;
 

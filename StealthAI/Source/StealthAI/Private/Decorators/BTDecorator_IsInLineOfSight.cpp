@@ -13,11 +13,9 @@ bool UBTDecorator_IsInLineOfSight::CalculateRawConditionValue(UBehaviorTreeCompo
 	const UBlackboardComponent* MyBlackboard = OwnerComp.GetBlackboardComponent();
 	ACustomAIController* MyAIController = Cast<ACustomAIController>(OwnerComp.GetAIOwner());
 
-	if (!MyBlackboard || !MyAIController || !Cast<AStealthAIAgent>(MyAIController->GetPawn()))
+	if (!MyBlackboard || !MyAIController || !Cast<AStealthAIAgent>(MyAIController->GetPawn()))	// Ensures all Pointers are valid.
 	{
 		return false;
 	}
-
-
 	return (Cast<AStealthAICharacter>(MyAIController->GetSeenPawn())) ? true : false;
 }

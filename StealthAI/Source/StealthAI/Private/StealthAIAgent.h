@@ -10,9 +10,12 @@
 #include "Perception/AISenseConfig_Sight.h"
 #include "Perception/AISenseConfig_Hearing.h"
 #include "Perception/AIPerceptionTypes.h"
+#include "Sound/SoundCue.h"
 
 #include "Navmesh/RecastNavMesh.h"
 #include "NavigationSystem.h"
+
+#include "SpawnPoint.h"
 
 #include "BehaviorTree/Blackboard/BlackboardKeyType_Bool.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -29,29 +32,58 @@ class AStealthAIAgent : public ACharacter
 {
 	GENERATED_BODY()
 
-public:
 	// Sets default values for this character's properties
 	AStealthAIAgent();
 
 public:
 	// Sets default values for this pawn's properties
-	ARecastNavMesh* GetNavmesh();
 
 	USceneComponent* RootComp;
 
 	UPROPERTY(EditAnywhere)
 	UBehaviorTree* BehaviourTree;
 
-	ACustomAIController* AIController;
-	
+	UPROPERTY(EditAnywhere)
+	UStaticMesh* BulletMesh;	// Allows custom mesh for bullet mesh
+
+	UPROPERTY(EditAnywhere)
+	TArray<APatrolPoint*> PatrolPoints;
+
+	UPROPERTY(EditAnywhere)
+	USoundCue* ShootingSound;
+
+	UPROPERTY(EditAnywhere)
+	USoundCue* FootstepsSound;
+
+	UPROPERTY(EditAnywhere)
+	FVector EyeViewPoint;
+
+	UPROPERTY(EditAnywhere)
+	FVector GunPoint;
+
+	UPROPERTY(BlueprintReadWrite)
+	float EnemyHealth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float EnemyMaxHealth;
+
+
 protected:
-	// Called when the game starts or when spawned
+	/// <summary>
+	/// Sets AI Perception position
+	/// </summary>
+	/// <returns> The Location at which AI perception originates from. </returns>
+	virtual FVector GetPawnViewLocation() const override;
+
+	/// <summary>
+	/// Sets AI Perception Rotation was serious problem where the perception wouldn't turn with the pawn
+	/// </summary>
+	/// <returns> The Rotation at which AI Perception is oriented </returns>
+	virtual FRotator GetViewRotation() const override;
+
+	/// <summary>
+	/// Called when game starts and sets AI controller
+	/// </summary>
 	virtual void BeginPlay() override;
-
-
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 
 };

@@ -19,7 +19,7 @@ EBTNodeResult::Type UBTTask_PredictPlayerLocation::ExecuteTask(UBehaviorTreeComp
 		return EBTNodeResult::Type::Failed;
 	}
 	
-	float DeltaTime = MyBlackboard->GetValueAsFloat("PlayerSeenTime") - MyBlackboard->GetValueAsFloat("PlayerSeenTimer");
+	float DeltaSeenTime = MyBlackboard->GetValueAsFloat("PlayerSeenTime") - MyBlackboard->GetValueAsFloat("PlayerSeenTimer");
 	FVector PlayerVelocity = MyBlackboard->GetValueAsVector("PlayerVelocity");
 	float RandomAngle = FMath::RandRange(-90, 90) * PI/180;
 	
@@ -30,7 +30,7 @@ EBTNodeResult::Type UBTTask_PredictPlayerLocation::ExecuteTask(UBehaviorTreeComp
 	
 	FVector VelDir = RotatedVelocity;
 	VelDir.Normalize();
-	RotatedVelocity = VelDir * (RotatedVelocity * DeltaTime);
+	RotatedVelocity = VelDir * (RotatedVelocity * DeltaSeenTime);
 
 	if (RotatedVelocity.Length() > MyBlackboard->GetValueAsFloat("MaxVelocityRadii"))
 	{

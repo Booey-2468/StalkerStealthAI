@@ -5,7 +5,7 @@
 
 UBTDecorator_IsInRange::UBTDecorator_IsInRange()
 {
-	NodeName = "Is In Range";
+	NodeName = "Is Out of Range";
 	bCreateNodeInstance = true;
 }
 
@@ -13,11 +13,11 @@ bool UBTDecorator_IsInRange::CalculateRawConditionValue(UBehaviorTreeComponent& 
 {
 	const UBlackboardComponent* MyBlackboard = OwnerComp.GetBlackboardComponent();
 
-	if (!MyBlackboard)
+	if (!MyBlackboard)	// Ensures Pointers are valid.
 	{
 		return false;
 	}
-	float DistFromPlayer = MyBlackboard->GetValueAsFloat("DistFromPlayer");
-	bool InRange = DistFromPlayer < MyBlackboard->GetValueAsFloat("MaxFiringRange") && DistFromPlayer > MyBlackboard->GetValueAsFloat("MinFiringRange");
+	float DistFromPlayer = MyBlackboard->GetValueAsFloat("DistFromPlayer");	// Stores the distance from the player and uses it in is in range boolean
+	bool InRange = (DistFromPlayer < MyBlackboard->GetValueAsFloat("MinFiringRange") || DistFromPlayer > MyBlackboard->GetValueAsFloat("MaxFiringRange"));
 	return InRange;
 }

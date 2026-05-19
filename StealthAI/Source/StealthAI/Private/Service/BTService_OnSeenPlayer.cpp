@@ -11,26 +11,37 @@ UBTService_OnSeenPlayer::UBTService_OnSeenPlayer()
 void UBTService_OnSeenPlayer::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	UBlackboardComponent* MyBlackboard = OwnerComp.GetBlackboardComponent();
-	AAIController* MyAIController = OwnerComp.GetAIOwner();
+	ACustomAIController* MyAIController = Cast<ACustomAIController>(OwnerComp.GetAIOwner());
 
-	AStealthAICharacter* Player = Cast<AStealthAICharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	AStealthAICharacter* Player;	
+	AStealthAIAgent* MyAgent;
 
-	if (!MyBlackboard || !MyAIController || !Cast<AStealthAIAgent>(MyAIController->GetPawn()) || !Player)
+	if (!MyBlackboard || !MyAIController || !(MyAgent = Cast<AStealthAIAgent>(MyAIController->GetPawn())) || !(Player = Cast<AStealthAICharacter>(MyAIController->GetSeenPawn())))
 	{
-		return;
+		return;	//Ensures all pointers are valid
 	}
 
-	AStealthAIAgent* MyAgent = Cast<AStealthAIAgent>(MyAIController->GetPawn());
-
-	MyBlackboard->SetValueAsVector("PlayerVelocity", Player->GetVelocity());
+	MyBlackboard->SetValueAsVector("PlayerVelocity", Player->GetVelocity());	// Records velocity for later deep roaming
 
 	float DistFromPlayer = (Player->GetActorLocation() - MyAgent->GetActorLocation()).Length();
+	UCharacterMovementComponent* Movement = MyAgent->GetCharacterMovement();
 
-	MyBlackboard->SetValueAsFloat("DistFromPlayer", DistFromPlayer);
+	Movement->bOrientRotationToMovement = false;
+	Movement->MaxWalkSpeed = 600.0f;
 
-	MyBlackboard->SetValueAsBool("IsAlert", true);
+	MyBlackboard->SetValueAsBool("IsShooting", true);
+
+	MyBlackboard->SetValueAsBool("HasHeard", false);
+
+	MyBlackboard->SetValueAsFloat("DistFromPlayer", DistFromPlayer);	// Records distance for range checks
+
+	MyBlackboard->SetValueAsBool("IsAlert", true);	// Sets IsAlert to true and starts timer 
 	MyBlackboard->SetValueAsFloat("AlertStateTimer", MyBlackboard->GetValueAsFloat("AlertStateTime"));
+
+	MyBlackboard->SetValueAsBool("IsRecentlyDetected", false);	// Ensures deep roaming and recently detected are reset
 	MyBlackboard->SetValueAsBool("ShouldStartInDepthRoaming", false);
 
-	MyBlackboard->SetValueAsVector("LastDetectedLocation", Player->GetActorLocation());
+	MyBlackboard->SetValueAsVector("LastDetectedLocation", Player->GetActorLocation());	// Sets last detected location for later roaming
+
+	MyBlackboard->SetValueAsBool("IsPatrolling", false);
 }
