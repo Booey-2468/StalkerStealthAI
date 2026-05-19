@@ -18,10 +18,17 @@ class STEALTHAI_API UEnvQueryGenerator_SurroundCone : public UEnvQueryGenerator_
 	GENERATED_BODY()
 	
 	UPROPERTY(EditAnywhere, Category = ConeProperties)
-	float PointsDist = 50.0f;
+	float PointsDist = 50.0f;	// Distance between points
 
 	UPROPERTY(EditAnywhere, Category = ConeProperties)
-	float ConeRadius = 50.0f;
+	float ConeRadius = 50.0f;	// Radius of cone 
+
+
+
 public:
+	/// <summary>
+	/// Generates a cone of EQS items in a cone I generally only use it in a circle though
+	/// </summary>
+	/// <param name="QueryInstance">Used in override and for getting owner pawn.</param>
 	virtual void GenerateItems(FEnvQueryInstance& QueryInstance) const override;
 };

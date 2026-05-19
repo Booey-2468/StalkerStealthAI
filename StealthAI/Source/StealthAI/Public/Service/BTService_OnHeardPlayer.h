@@ -25,7 +25,16 @@ class STEALTHAI_API UBTService_OnHeardPlayer : public UBTService_BlackboardBase
 {
 	GENERATED_BODY()
 	
+	/// <summary>
+	/// Sets Name and confirms that the node will be instanced.
+	/// </summary>
 	UBTService_OnHeardPlayer();
 
+	/// <summary>
+	/// Updates hearing based blackboard information after being heard.
+	/// </summary>
+	/// <param name="OwnerComp"> </param>
+	/// <param name="NodeMemory"> Used for override. </param>
+	/// <param name="DeltaSeconds"> Used for override. </param>
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 };

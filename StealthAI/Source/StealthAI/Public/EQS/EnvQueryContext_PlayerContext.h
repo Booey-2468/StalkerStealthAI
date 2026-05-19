@@ -21,5 +21,10 @@ class STEALTHAI_API UEnvQueryContext_PlayerContext : public UEnvQueryContext
 {
 	GENERATED_BODY()
 	
+	/// <summary>
+	/// Provides context to player character object
+	/// </summary>
+	/// <param name="QueryInstance"> Used for override. </param>
+	/// <param name="ContextData"> Used for override.</param>
 	virtual void ProvideContext(FEnvQueryInstance& QueryInstance, FEnvQueryContextData& ContextData) const override;
 };

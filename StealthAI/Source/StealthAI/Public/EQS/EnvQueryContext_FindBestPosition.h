@@ -21,6 +21,11 @@ class STEALTHAI_API UEnvQueryContext_FindBestPosition : public UEnvQueryContext
 {
 	GENERATED_BODY()
 	
+	/// <summary>
+	/// Used to set the context helper to current target location for other tests such as distance to target location
+	/// </summary>
+	/// <param name="QueryInstance"> Used for override. </param>
+	/// <param name="ContextData"> Used for override. </param>
 	virtual void ProvideContext(FEnvQueryInstance& QueryInstance, FEnvQueryContextData& ContextData) const override;
 
 };
