@@ -9,6 +9,7 @@
 #include "Perception/AISense_Sight.h"
 #include "Perception/AISense_Hearing.h"
 
+#include "Sound/SoundCue.h"
 
 #include "Logging/LogMacros.h"
 #include "StealthAICharacter.generated.h"
@@ -50,22 +51,41 @@ class AStealthAICharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* CrouchAction;
+
 	UPROPERTY(VisibleAnywhere)
 	UAIPerceptionStimuliSourceComponent* StimuliSource;
 
+	UPROPERTY(EditAnywhere)
+	USoundCue* FootstepSound;
+
 public:
+	UPROPERTY(BlueprintReadOnly)
+	float Health;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float MaxHealth;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool IsCrouching = false;
+
 	AStealthAICharacter();
-	
+
 
 protected:
+
 
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-			
 
+	void CustomCrouch();
+		
+	void CustomUnCrouch();
+
+	virtual void BeginPlay() override;
 protected:
 
 	virtual void NotifyControllerChanged() override;

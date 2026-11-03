@@ -33,6 +33,7 @@ AStealthAICharacter::AStealthAICharacter()
 	bUseControllerRotationRoll = false;
 
 	// Configure character movement
+	// Used for Rotation when Patrolling and Roaming
 	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 600.0f, 0.0f); // ...at this rotation rate
 
@@ -90,6 +91,10 @@ void AStealthAICharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AStealthAICharacter::Look);
+
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &AStealthAICharacter::CustomCrouch);
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &AStealthAICharacter::CustomUnCrouch);
+
 	}
 	else
 	{
@@ -114,6 +119,13 @@ void AStealthAICharacter::Move(const FInputActionValue& Value)
 		// get right vector 
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
+		// Makes sure the player is not crouching based off of walk speed and then ensures the player is moving at all
+		if(GetCharacterMovement()->MaxWalkSpeed >= 500.0f && MovementVector.Length() > 0 && !IsCrouching)	
+		{
+			// Gets bottom of character and places and reports noise event at their feet/bottom with a range of 500
+			FVector CharacterBottom = GetActorLocation() - GetActorUpVector() * GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
+			UAISense_Hearing::ReportNoiseEvent(GetWorld(), CharacterBottom, 1.0f, this, 500.0f);
+		}
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
@@ -131,4 +143,24 @@ void AStealthAICharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void AStealthAICharacter::CustomCrouch()
+{
+	Crouch();
+	SetActorScale3D(FVector(0.5f));
+	IsCrouching = true;
+}
+
+void AStealthAICharacter::CustomUnCrouch()
+{
+	UnCrouch();
+	SetActorScale3D(FVector(1));
+	IsCrouching = false;
+}
+
+void AStealthAICharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	Health = MaxHealth;
 }
